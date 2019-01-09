@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<style>
+		html, body {
+			padding: 0;
+			margin: 0;
+			border: 0;
+			background-color: #c0c0c0;
+		}
+		div {
+			box-sizing: border-box;
+			font-size: 0;
+		}
+		.left {
+			display: inline-block;
+			padding: 0px 30px;
+			width: 30%;
+			vertical-align: top;
+		}
+		.right {
+			display: inline-block;
+			vertical-align: top;
+			overflow: hidden;
+		}
+		.left img {
+			max-width: 100%;
+		}
+		.left_in {
+			position: relative;
+		}
+		.left_box_zoom {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			border: 3px solid white;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="left">
+		<div class="left_in" onmousemove="mover(event);">
+			<img src="imagem.jpg" />
+			<div class="left_box_zoom"></div>
+		</div>
+	</div><div class="right">
+		<img src="imagem.jpg" />
+	</div>
+
+	<script type="text/javascript">
+		var right = document.querySelector('.right');
+		var leftBox = document.querySelector('.left_box_zoom');
+		var leftIn = document.querySelector('.left_in');
+		var img1 = document.querySelector('.left_in img');
+		var img2 = document.querySelector('.right img');
+
+		var tamZoom = 4; // Percentual do Zoom
+		var tamIndicador = 80;
+		var altIndicador = 80;
+
+		function fnResize() {
+			leftBox.style.width = tamIndicador + 'px';
+			leftBox.style.height = altIndicador + 'px';
+
+			img2.style.width = (img1.offsetWidth * tamZoom) + 'px';
+			right.style.width = (tamIndicador * tamZoom) + 'px';
+			right.style.height = (altIndicador * tamZoom) + 'px';
+		}
+		function mover(e) {
+			var offsetX = e.offsetX;
+			var offsetY = e.offsetY;
+			if (e.target.className == 'left_box_zoom') {
+				var l = parseFloat(leftBox.style.left.replace('px', ''));
+				var t = parseFloat(leftBox.style.top.replace('px', ''));
+				offsetX += l;
+				offsetY += t;
+				leftBox.style.left = (offsetX) + 'px';
+				leftBox.style.top = (offsetY) + 'px';
+			} else {
+				leftBox.style.left = offsetX + 'px';
+				leftBox.style.top = offsetY + 'px';
+			}
+			
+			var percX = offsetX / img1.offsetWidth;
+			var deslocX = img2.offsetWidth * percX;
+
+			var percY = offsetY / img1.offsetHeight;
+			var deslocY = img2.offsetHeight * percY;
+
+			img2.style.transform = 'translate(-' + deslocX + 'px, -' + deslocY + 'px)';
+		}
+		window.addEventListener("resize", fnResize);
+		window.addEventListener("load", fnResize);
+	</script>
+</body>
+</html>
